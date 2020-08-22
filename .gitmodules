@@ -1,0 +1,11 @@
+[submodule "dependencies/text_tree"]
+	path = dependencies/text_tree
+	url = git@github.com:Marcos30004347/text_tree.git
+
+[submodule "dependencies/freetype2"]
+	path = dependencies/freetype2
+	url = git@github.com:Marcos30004347/freetype2.git
+
+[submodule "dependencies/harfbuzz"]
+	path = dependencies/harfbuzz
+	url = git@github.com:Marcos30004347/harfbuzz.git

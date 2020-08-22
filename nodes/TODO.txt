@@ -1,0 +1,16 @@
+log
+somatorio
+produtorio
+matrix
+
+//trigonometry
+cos
+sin
+tan
+acos
+asin
+...
+
+Text...
+
+INTERPRETERS ??? 
