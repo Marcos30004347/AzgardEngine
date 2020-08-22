@@ -1,5 +1,5 @@
-#ifndef CANVAS_H
-#define CANVAS_H
+#ifndef WINDOW_H
+#define WINDOW_H
 
 enum CanvasContext{
     NullContext = 0,

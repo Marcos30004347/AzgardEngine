@@ -1,5 +1,7 @@
-
 #include "WindowSDL2.hpp"
+#include "definitions.hpp"
+
+#ifdef SDL2_IMP
 
 SDL2Window::SDL2Window(const char* title, size_t width, size_t height) {
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -44,3 +46,5 @@ void SDL2Window::SetContext(CanvasContext context) {
         SDL_GL_MakeCurrent(this->canvas, ctx);
     }
 }
+
+#endif

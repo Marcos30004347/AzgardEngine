@@ -1,0 +1,7 @@
+We need a better handling of dependencies lol
+
+Dependencies:
+    Freetype2
+    Harfbuzz
+    SDL2
+    GLEW

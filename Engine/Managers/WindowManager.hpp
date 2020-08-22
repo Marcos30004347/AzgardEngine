@@ -1,5 +1,5 @@
-#ifndef SURFACE_MANAGER_H
-#define SURFACE_MANAGER_H
+#ifndef WINDOW_MANAGER_H
+#define WINDOW_MANAGER_H
 
 #include "Window/Window.hpp"
 

@@ -1,12 +1,16 @@
 cmake_minimum_required(VERSION 3.10)
 
 
-set(ENGINE_PROJECT_NAME engine)
+set(ENGINE_PROJECT_NAME AzgardEngine)
+
 project(${ENGINE_PROJECT_NAME})
 
 
 function(link_sdl2)
+    if (NOT SDL2)
     find_package(SDL2 REQUIRED)
+    endif()
+
     link_libraries(${SDL2_LIBRARIES})
     include_directories(${SDL2_INCLUDE_DIRS})
 endfunction(link_sdl2)
@@ -14,7 +18,11 @@ endfunction(link_sdl2)
 function(link_opengl)
     set(OpenGL_GL_PREFERENCE GLVND)
     find_package(OpenGL REQUIRED)
+
+    if (NOT GLEW)
     find_package(GLEW REQUIRED)
+    endif()
+
     link_libraries(${OPENGL_LIBRARIES})
     link_libraries(${GLEW_LIBRARIES})
     include_directories(${GLEW_INCLUDE_DIRS})
@@ -98,23 +106,23 @@ link_thread()
 
 endif()
 
-include_directories(
-    ${HarfBuzz_INCLUDE_DIR}
-    ${SDL2_INCLUDE_DIRS}
-    ${FREETYPE_INCLUDE_DIRS}
-)
+# include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+# include_directories(Window)
+# include_directories(Renderer)
+# include_directories(Managers)
 
 
 add_library(
     ${ENGINE_PROJECT_NAME}
+
     Managers/Engine.cpp
     Managers/MeshManager.cpp
     Managers/PlatformManager.cpp
     Managers/FileManager.cpp
     Managers/LogManager.cpp
     Managers/JobManager.cpp
-    Managers/WindowManager.cpp
     Managers/EventManager.cpp
+    Managers/WindowManager.cpp
 
     Renderer/Botticelli/Botticelli.cpp
     Renderer/Botticelli/OpenGLES3/BotticelliOpenGLES3.cpp
@@ -122,5 +130,5 @@ add_library(
     Window/SDL2/WindowSDL2.cpp
 )
 
-target_include_directories(${ENGINE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
-target_include_directories(${ENGINE_PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Managers)
+target_include_directories(${ENGINE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${HarfBuzz_INCLUDE_DIR} ${SDL2_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS})
+target_include_directories(${ENGINE_PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

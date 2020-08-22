@@ -7,7 +7,7 @@ enum EventTypes {
 };
 
 struct Event {
-    EventTypes type;
+    EventTypes type = NULL_EVENT;
 };
 
 class EventManager {
