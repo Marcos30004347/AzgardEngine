@@ -5,3 +5,4 @@ Dependencies:
     Harfbuzz
     SDL2
     GLEW
+    GLM

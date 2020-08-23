@@ -9,12 +9,14 @@
 #include "Renderer/Renderer.hpp"
 #include "DataStructures/Identifier.hpp"
 #include "Mesh/StaticMeshCollectionES3.hpp"
+#include "Camera/CameraCollectionES3.hpp"
 
 enum OpenGLES3SuportedFeatures {};
 
 class RendererES3 : public Renderer {
     private:
     StaticMeshCollectionES3 gStaticMeshCollectionES3;
+    CameraCollectionES3 gCameraCollectionES3;
 
     public:
     RendererES3();

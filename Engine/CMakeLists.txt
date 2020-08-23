@@ -152,11 +152,17 @@ add_library(
     Managers/DrawManager.cpp
     Managers/SceneManager.cpp
 
-
     Renderer/DaVinci/OpenGLES3/RendererES3.cpp
-    Renderer/DaVinci/OpenGLES3/ShaderES3.cpp
-    Renderer/DaVinci/OpenGLES3/StaticMeshES3.cpp
-    Renderer/DaVinci/OpenGLES3/StaticMeshCollectionES3.cpp
+
+    Renderer/DaVinci/OpenGLES3/Material/ShaderES3.cpp
+    Renderer/DaVinci/OpenGLES3/Material/MaterialES3.cpp
+    Renderer/DaVinci/OpenGLES3/Material/MaterialCollectionES3.cpp
+
+    Renderer/DaVinci/OpenGLES3/Mesh/StaticMeshES3.cpp
+    Renderer/DaVinci/OpenGLES3/Mesh/StaticMeshCollectionES3.cpp
+
+    Renderer/DaVinci/OpenGLES3/Camera/CameraES3.cpp
+    Renderer/DaVinci/OpenGLES3/Camera/CameraCollectionES3.cpp
 
     Window/SDL2/WindowSDL2.cpp
 )

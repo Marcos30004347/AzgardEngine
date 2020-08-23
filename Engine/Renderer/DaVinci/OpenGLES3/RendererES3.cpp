@@ -16,6 +16,7 @@ RendererES3::RendererES3() {
     glClearColor(1.f, 0.0f, 1.0f, 1.0f);
 
     this->gStaticMeshCollectionES3 = StaticMeshCollectionES3();
+    this->gCameraCollectionES3 = CameraCollectionES3();
 }
 
 RendererES3::~RendererES3() {
