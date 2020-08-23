@@ -1,6 +1,10 @@
 #include "ShaderES3.hpp"
 #include <string>
 
+#include "definitions.hpp"
+
+#ifdef OPENGLES3_API
+
 ShaderES3::ShaderES3(const char* vertexShaderSrc, const char* fragmentShaderSrc) {
     //TODO: dont know if vertex and fragment shaders can be destroyed here after the program compilation
 
@@ -104,3 +108,5 @@ ShaderES3::~ShaderES3() {
     glDeleteShader(this->VertexShader);
     glDeleteShader(this->FragmentShader);
 }
+
+#endif

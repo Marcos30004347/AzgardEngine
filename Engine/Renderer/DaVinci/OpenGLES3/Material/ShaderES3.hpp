@@ -1,5 +1,10 @@
-#ifndef GLES3_SHADER_H
-#define GLES3_SHADER_H
+#include "definitions.hpp"
+
+#ifndef SHADERES3_H
+#ifdef OPENGLES3_API
+
+#define SHADERES3_H
+
 
 #include <GL/glew.h>
 #include "glm/glm.hpp"
@@ -29,4 +34,5 @@ class ShaderES3 {
     void UniformInt(const char* name, int data);
 };
 
+#endif
 #endif

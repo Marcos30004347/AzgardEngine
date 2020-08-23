@@ -6,6 +6,7 @@ set(ENGINE_PROJECT_NAME AzgardEngine)
 project(${ENGINE_PROJECT_NAME})
 
 
+
 function(link_sdl2)
     if (NOT SDL2)
     find_package(SDL2 REQUIRED)
@@ -52,13 +53,23 @@ function(link_thread)
     link_libraries(Threads::Threads)
 endfunction(link_thread)
 
+
+
+function(link_glm)
+    if(NOT glm)
+    find_library(glm REQUIRED)
+    endif()
+
+    link_libraries(glm)
+endfunction(link_glm)
+
+
 #Link platform specific libraries
 if (${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
 #Compiling for browser
 
 set(USE_FLAGS "${USE_FLAGS} -o3")
 set(USE_FLAGS "${USE_FLAGS} -std=c++11")
-
 set(USE_FLAGS "${USE_FLAGS} -s WASM=1")
 set(USE_FLAGS "${USE_FLAGS} -s FULL_ES3=1")
 set(USE_FLAGS "${USE_FLAGS} -s USE_GLFW=3")
@@ -68,12 +79,16 @@ set(USE_FLAGS "${USE_FLAGS} -s USE_HARFBUZZ=1")
 set(USE_FLAGS "${USE_FLAGS} -s USE_FREETYPE=1")
 set(USE_FLAGS "${USE_FLAGS} -s USE_PTHREADS=1")
 set(USE_FLAGS "${USE_FLAGS} -s PTHREAD_POOL_SIZE=8")
-# set(USE_FLAGS "${USE_FLAGS} -s ALLOW_MEMORY_GROWTH=1")
+set(USE_FLAGS "${USE_FLAGS} -s ALLOW_MEMORY_GROWTH=1")
+set(USE_FLAGS "${USE_FLAGS} -s SIMD=1")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${USE_FLAGS}")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${USE_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${USE_FLAGS}")
 set(CMAKE_EXECUTABLE_SUFFIX .js)
+
+link_glm()
+
 
 elseif(APPLE)
 #Compiling for macos
@@ -83,6 +98,7 @@ link_opengl()
 link_harfbuzz()
 link_freetype()
 link_thread()
+link_glm()
 
 elseif (LINUX OR UNIX)
 #Compiling for Linux/Unix
@@ -92,6 +108,7 @@ link_opengl()
 link_harfbuzz()
 link_freetype()
 link_thread()
+link_glm()
 
 elseif(MSVC)
 #Compiling for Windows
@@ -103,17 +120,26 @@ link_opengl()
 link_harfbuzz()
 link_freetype()
 link_thread()
+link_glm()
 
 endif()
 
-# include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-# include_directories(Window)
-# include_directories(Renderer)
-# include_directories(Managers)
+
+include_directories(${CMAKE_SOURCE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/Window)
+include_directories(${CMAKE_SOURCE_DIR}/Renderer)
+include_directories(${CMAKE_SOURCE_DIR}/Managers)
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Window)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Renderer)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Managers)
 
 
 add_library(
     ${ENGINE_PROJECT_NAME}
+
+    DataStructures/Identifier.cpp
 
     Managers/Engine.cpp
     Managers/MeshManager.cpp
@@ -123,12 +149,18 @@ add_library(
     Managers/JobManager.cpp
     Managers/EventManager.cpp
     Managers/WindowManager.cpp
+    Managers/DrawManager.cpp
+    Managers/SceneManager.cpp
 
-    Renderer/Botticelli/Botticelli.cpp
-    Renderer/Botticelli/OpenGLES3/BotticelliOpenGLES3.cpp
+
+    Renderer/DaVinci/OpenGLES3/RendererES3.cpp
+    Renderer/DaVinci/OpenGLES3/ShaderES3.cpp
+    Renderer/DaVinci/OpenGLES3/StaticMeshES3.cpp
+    Renderer/DaVinci/OpenGLES3/StaticMeshCollectionES3.cpp
 
     Window/SDL2/WindowSDL2.cpp
 )
 
 target_include_directories(${ENGINE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${HarfBuzz_INCLUDE_DIR} ${SDL2_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS})
 target_include_directories(${ENGINE_PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+

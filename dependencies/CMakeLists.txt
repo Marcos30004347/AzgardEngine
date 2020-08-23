@@ -9,3 +9,4 @@ endif()
 
 add_subdirectory(text_tree)
 add_subdirectory(vec-t)
+add_subdirectory(glm)

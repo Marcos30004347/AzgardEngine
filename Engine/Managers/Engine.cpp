@@ -7,19 +7,25 @@
 #include "FileManager.hpp"
 #include "EventManager.hpp"
 #include "WindowManager.hpp"
+#include "DrawManager.hpp"
+#include "SceneManager.hpp"
 
 
 Engine::Engine() {
     LogManager::StartUp();
     PlatformManager::StartUp();
-    WindowManager::StartUp();
+    WindowManager::StartUp("Azgard Engine", 1200, 720);
     EventManager::StartUp();
     FileManager::StartUp();
+    DrawManager::StartUp();
+    SceneManager::StartUp();
     MeshManager::StartUp();
 }
 
 Engine::~Engine() {
     MeshManager::ShutDown();    
+    SceneManager::ShutDown();
+    DrawManager::ShutDown();    
     FileManager::ShutDown();    
     EventManager::ShutDown();
     WindowManager::ShutDown();

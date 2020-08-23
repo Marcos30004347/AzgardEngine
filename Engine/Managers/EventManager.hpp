@@ -26,7 +26,7 @@ class EventManager {
     static EventManager& GetSingleton(void);
     static EventManager* GetSingletonPtr(void);
 
-    void Pool(Event *event);
+    bool Pool(Event *event);
 };
 
 #endif

@@ -12,9 +12,9 @@ class SDL2Window : public Window {
     
     SDL_Window *canvas;
 
-    void* ctx;
+    SDL_GLContext glContext;
 
-    CanvasContext context_type;
+    WindowContext currentContextType;
 
     public:
 
@@ -23,7 +23,7 @@ class SDL2Window : public Window {
 
     void Swap();
 
-    void SetContext(CanvasContext context);
+    void SetContext(WindowContext context);
     void SetVsync(bool useVsync);
 
 };

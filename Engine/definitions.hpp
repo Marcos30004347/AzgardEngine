@@ -1,3 +1,6 @@
+#ifndef GLOBAL_DEFINITIONS
+#define GLOBAL_DEFINITIONS
+
 #if __EMSCRIPTEN__
 
 #define BROWSER_PLATFORM
@@ -29,4 +32,5 @@
 #define OPENGLES3_API
 #define SDL2_IMP
 
+#endif
 #endif

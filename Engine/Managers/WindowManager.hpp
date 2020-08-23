@@ -8,19 +8,23 @@ class WindowManager {
 
     private:
     static WindowManager* gInstance;
+    static Window* gMainWindow;
 
     WindowManager();
     ~WindowManager();
 
-    static void StartUp();
+    static void StartUp(const char* title, size_t width, size_t height);
     static void ShutDown();
 
     public:
 
     static WindowManager& GetSingleton(void);
     static WindowManager* GetSingletonPtr(void);
+    static void SetContext(WindowContext context);
 
-    Window* CreateWindow(const char* title, size_t width, size_t height);
+    static void Swap();
+    static void UseVsync(bool vsync);
+    // Window* CreateWindow(const char* title, size_t width, size_t height);
 };
 
 #endif

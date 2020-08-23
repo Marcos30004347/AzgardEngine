@@ -35,11 +35,11 @@ void EventManager::ShutDown() {
     delete EventManager::gInstance;
 }
 
-void EventManager::Pool(Event *event) {
+bool EventManager::Pool(Event *event) {
     #ifdef SDL2_IMP
 
-    SDL_PollEvent(&sdl2_event);
-
+    int pedding = SDL_PollEvent(&sdl2_event);
+    
     switch (sdl2_event.type)
     {
     case SDL_QUIT:
@@ -56,4 +56,6 @@ void EventManager::Pool(Event *event) {
     #error IMPLEMENTATION NOT DEFINED
 
     #endif
+
+    return pedding;
 }
