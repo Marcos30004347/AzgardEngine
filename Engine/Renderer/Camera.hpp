@@ -8,6 +8,4 @@ struct Camera {
 };
 
 
-
-
 #endif

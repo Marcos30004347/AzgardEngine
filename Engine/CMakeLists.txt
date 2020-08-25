@@ -64,6 +64,39 @@ function(link_glm)
 endfunction(link_glm)
 
 
+function(link_tinygltf)
+    if(NOT tinygltf)
+    find_library(tinygltf REQUIRED)
+    endif()
+
+    link_libraries(tinygltf)
+endfunction(link_tinygltf)
+
+function(link_rapidjson)
+    if(NOT RapidJSON)
+    find_package(RapidJSON REQUIRED)
+    endif()
+
+    link_libraries(rapidjson)
+endfunction(link_rapidjson)
+
+function(link_tinyobjloader)
+    if(NOT tinyobjloader)
+    find_library(tinyobjloader REQUIRED)
+    endif()
+
+    link_libraries(tinyobjloader)
+endfunction(link_tinyobjloader)
+
+function(link_objwriter)
+    # if(NOT objwriter)
+    # find_package(objwriter CONFIG REQUIRED)
+    # endif()
+
+    link_libraries(objwriter)
+endfunction(link_objwriter)
+
+
 #Link platform specific libraries
 if (${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
 #Compiling for browser
@@ -80,7 +113,6 @@ set(USE_FLAGS "${USE_FLAGS} -s USE_FREETYPE=1")
 set(USE_FLAGS "${USE_FLAGS} -s USE_PTHREADS=1")
 set(USE_FLAGS "${USE_FLAGS} -s PTHREAD_POOL_SIZE=8")
 set(USE_FLAGS "${USE_FLAGS} -s ALLOW_MEMORY_GROWTH=1")
-set(USE_FLAGS "${USE_FLAGS} -s SIMD=1")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${USE_FLAGS}")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${USE_FLAGS}")
@@ -88,6 +120,9 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${USE_FLAGS}")
 set(CMAKE_EXECUTABLE_SUFFIX .js)
 
 link_glm()
+link_tinygltf()
+link_objwriter()
+link_tinyobjloader()
 
 
 elseif(APPLE)
@@ -99,6 +134,10 @@ link_harfbuzz()
 link_freetype()
 link_thread()
 link_glm()
+link_tinygltf()
+link_rapidjson()
+link_tinyobjloader()
+link_objwriter()
 
 elseif (LINUX OR UNIX)
 #Compiling for Linux/Unix
@@ -109,6 +148,9 @@ link_harfbuzz()
 link_freetype()
 link_thread()
 link_glm()
+link_tinygltf()
+link_rapidjson()
+link_objwriter()
 
 elseif(MSVC)
 #Compiling for Windows
@@ -121,19 +163,18 @@ link_harfbuzz()
 link_freetype()
 link_thread()
 link_glm()
+link_tinygltf()
+link_rapidjson()
+link_objwriter()
 
 endif()
 
-
-include_directories(${CMAKE_SOURCE_DIR})
-include_directories(${CMAKE_SOURCE_DIR}/Window)
-include_directories(${CMAKE_SOURCE_DIR}/Renderer)
-include_directories(${CMAKE_SOURCE_DIR}/Managers)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Window)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Renderer)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Managers)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/DataStructures)
 
 
 add_library(
@@ -152,14 +193,18 @@ add_library(
     Managers/DrawManager.cpp
     Managers/SceneManager.cpp
 
+    FileFormats/Gltf2/Parser.cpp
+    FileFormats/Obj/Parser.cpp
+    FileFormats/Base64.cpp
+
     Renderer/DaVinci/OpenGLES3/RendererES3.cpp
 
     Renderer/DaVinci/OpenGLES3/Material/ShaderES3.cpp
     Renderer/DaVinci/OpenGLES3/Material/MaterialES3.cpp
     Renderer/DaVinci/OpenGLES3/Material/MaterialCollectionES3.cpp
 
-    Renderer/DaVinci/OpenGLES3/Mesh/StaticMeshES3.cpp
-    Renderer/DaVinci/OpenGLES3/Mesh/StaticMeshCollectionES3.cpp
+    Renderer/DaVinci/OpenGLES3/Mesh/MeshES3.cpp
+    Renderer/DaVinci/OpenGLES3/Mesh/MeshCollectionES3.cpp
 
     Renderer/DaVinci/OpenGLES3/Camera/CameraES3.cpp
     Renderer/DaVinci/OpenGLES3/Camera/CameraCollectionES3.cpp

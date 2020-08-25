@@ -7,15 +7,16 @@
 
 
 #include "Renderer/Renderer.hpp"
-#include "DataStructures/Identifier.hpp"
-#include "Mesh/StaticMeshCollectionES3.hpp"
+
+
+#include "Mesh/MeshCollectionES3.hpp"
 #include "Camera/CameraCollectionES3.hpp"
 
 enum OpenGLES3SuportedFeatures {};
 
 class RendererES3 : public Renderer {
     private:
-    StaticMeshCollectionES3 gStaticMeshCollectionES3;
+    MeshCollectionES3 gMeshCollectionES3;
     CameraCollectionES3 gCameraCollectionES3;
 
     public:
@@ -26,11 +27,13 @@ class RendererES3 : public Renderer {
     void FrameEnd();
     void RenderCmd();
 
-    StaticMesh CreateStaticMesh(StaticVertice* vertex_array_buffer, unsigned int* index_buffer_buffer, size_t num_vertices);
+    Mesh CreateMesh(Vertice* vertex_array_buffer, unsigned int* index_buffer_buffer, size_t num_vertices);
+    Camera CreateCamera(Vec3 position, Vec3 forward);
 
-    void DestroyStaticMesh(StaticMesh mesh);
+    void DestroyMesh(Mesh mesh);
+    void DestroyCamera(Camera camera);
 
-    void DrawStaticMesh(StaticMesh mesh);
+    void DrawMesh(Mesh mesh);
 
     std::vector<RendererFeature> GetFeatures();
     void EnableFeature(RendererFeature feat, void* feat_params = nullptr);
