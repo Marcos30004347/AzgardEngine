@@ -10,7 +10,7 @@
 class SDL2Window : public Window {
     private:
     
-    SDL_Window *canvas;
+    SDL_Window *window;
 
     SDL_GLContext glContext;
 

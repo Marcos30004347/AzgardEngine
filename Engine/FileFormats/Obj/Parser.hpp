@@ -1,23 +1,9 @@
-#include <vector>
+#ifndef OBJPARSER_H
+#define OBJPARSER_H
 
-#include "DataStructures/Vertice.hpp"
-
-using ObjVertices = std::vector<Vertice>;
-using ObjIndices = std::vector<unsigned int>;
+#include "DataStructures/Model.hpp"
 
 
-struct ObjMesh {
-    const char* name;
-    ObjIndices indices;
-    ObjVertices vertices;
-};
+ModelData ParseObj(const char* src);
 
-using ObjMeshes = std::vector<ObjMesh>;
-
-struct ObjModel {
-    const char* name;
-    ObjMeshes meshes;
-};
-
-ObjModel ParseObj(const char* src);
-
+#endif

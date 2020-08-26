@@ -1,11 +1,11 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "Mesh.hpp"
+#include "Model.hpp"
 #include "Camera.hpp"
 
 #include "DataStructures/Identifier.hpp"
-#include "DataStructures/Vertice.hpp"
+#include "DataStructures/Model.hpp"
 #include "DataStructures/Vec3.hpp"
 
 enum RendererFeature {};
@@ -20,14 +20,19 @@ class Renderer {
     public:
     virtual void FrameBegin() = 0;
     virtual void FrameEnd() = 0;
+    virtual void FrameSetCamera(CameraHandle camera) = 0;
 
-    virtual void DrawMesh(Mesh mesh) = 0;
 
-    virtual Mesh CreateMesh(Vertice* vertex_array_buffer, unsigned int* index_buffer_buffer, size_t num_vertices) = 0;
-    virtual Camera CreateCamera(Vec3 position, Vec3 forward) = 0;
+    virtual ModelHandle ModelCreate(ModelData data) = 0;
+    virtual void ModelDraw(ModelHandle mesh) = 0;
+    virtual void ModelDestroy(ModelHandle model) = 0;
 
-    virtual void DestroyMesh(Mesh mesh) = 0;
-    virtual void DestroyCamera(Camera camera) = 0;
+    virtual CameraHandle CameraCreate(Vec3 position, Vec3 forward, CameraProjection projection) = 0;
+    virtual void CameraTranslate(CameraHandle camera, Vec3 to) = 0;
+    virtual void CameraRotate(CameraHandle camera, float angle, Vec3 axis) = 0;
+    virtual void CameraLookAt(CameraHandle camera, Vec3 position) = 0;
+    virtual void CameraDestroy(CameraHandle camera) = 0;
+
 
     virtual std::vector<RendererFeature> GetFeatures() = 0;
     virtual void EnableFeature(RendererFeature feat, void* feat_params = nullptr) = 0;

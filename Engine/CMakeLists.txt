@@ -17,7 +17,7 @@ function(link_sdl2)
 endfunction(link_sdl2)
 
 function(link_opengl)
-    set(OpenGL_GL_PREFERENCE GLVND)
+    set(OpenGL_GL_PREFERENCE "GLVND")
     find_package(OpenGL REQUIRED)
 
     if (NOT GLEW)
@@ -204,7 +204,8 @@ add_library(
     Renderer/DaVinci/OpenGLES3/Material/MaterialCollectionES3.cpp
 
     Renderer/DaVinci/OpenGLES3/Mesh/MeshES3.cpp
-    Renderer/DaVinci/OpenGLES3/Mesh/MeshCollectionES3.cpp
+    Renderer/DaVinci/OpenGLES3/Mesh/ModelES3.cpp
+    Renderer/DaVinci/OpenGLES3/Mesh/ModelCollectionES3.cpp
 
     Renderer/DaVinci/OpenGLES3/Camera/CameraES3.cpp
     Renderer/DaVinci/OpenGLES3/Camera/CameraCollectionES3.cpp

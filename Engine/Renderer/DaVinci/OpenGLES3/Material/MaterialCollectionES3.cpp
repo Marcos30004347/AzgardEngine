@@ -63,7 +63,7 @@ void MaterialCollectionES3::Dellocate(Identifier id) {
     avaliableMaterialeIds.MakeAvaliable(id);
 };
 
-MaterialES3 MaterialCollectionES3::Get(Identifier id) {
+MaterialES3& MaterialCollectionES3::Get(Identifier id) {
     unsigned short minnor = GetIdentifierMinnor(id);
     unsigned short major = GetIdentifierMajor(id);
 

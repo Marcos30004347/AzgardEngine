@@ -44,9 +44,6 @@ void WindowManager::ShutDown() {
 void WindowManager::SetContext(WindowContext context) {
     gMainWindow->SetContext(context);
 }
-// Window* WindowManager::CreateWindow(const char* title, size_t width, size_t height) {
-
-// }
 
 void WindowManager::Swap() {
     gMainWindow->Swap();

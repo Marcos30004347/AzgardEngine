@@ -36,7 +36,7 @@ class MaterialCollectionES3 {
 
     Identifier Allocate();
     void Dellocate(Identifier id);
-    MaterialES3 Get(Identifier id);
+    MaterialES3& Get(Identifier id);
 
     void Destroy();
 };

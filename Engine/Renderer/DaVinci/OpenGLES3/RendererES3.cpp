@@ -3,7 +3,6 @@
 #ifdef OPENGLES3_API
 #include <GL/glew.h>
 
-
 #include "RendererES3.hpp"
 
 /*
@@ -17,12 +16,12 @@ RendererES3::RendererES3() {
 
     glClearColor(1.f, 0.0f, 1.0f, 1.0f);
 
-    this->gMeshCollectionES3 = MeshCollectionES3();
+    this->gModelCollectionES3 = ModelCollectionES3();
     this->gCameraCollectionES3 = CameraCollectionES3();
 }
 
 RendererES3::~RendererES3() {
-    this->gMeshCollectionES3.Destroy();
+    this->gModelCollectionES3.Destroy();
     this->gCameraCollectionES3.Destroy();
 }
 
@@ -44,9 +43,10 @@ void RendererES3::FrameEnd() {
     
 }
 
-void RendererES3::RenderCmd() {
-
+void RendererES3::FrameSetCamera(CameraHandle camera) {
+   this->activeCamera = this->gCameraCollectionES3.Get(camera.id); 
 }
+
 
 
 std::vector<RendererFeature> RendererES3::GetFeatures() {
@@ -54,58 +54,55 @@ std::vector<RendererFeature> RendererES3::GetFeatures() {
 }
 
 /*
-    Creators
+    Model
 */
-Mesh RendererES3::CreateMesh(Vertice* vertex_array_buffer, unsigned int* index_buffer_buffer, size_t num_vertices) {
-    Identifier id = this->gMeshCollectionES3.Allocate(vertex_array_buffer, index_buffer_buffer, num_vertices);
+ModelHandle RendererES3::ModelCreate(ModelData data) {
+    Identifier id = this->gModelCollectionES3.Allocate(data);
 
-    Mesh sm;
+    ModelHandle sm;
     sm.id = id;
+    sm.name = data.name;
 
     return sm;
 }
 
-Camera RendererES3::CreateCamera(Vec3 position, Vec3 forward){
-    Identifier id = this->gCameraCollectionES3.Allocate(glm::vec3(position.x, position.y, position.z), glm::vec3(forward.x, forward.y, forward.z));
+void RendererES3::ModelDestroy(ModelHandle mesh) {
+    this->gModelCollectionES3.Dellocate(mesh.id);
+}
 
-    Camera cam;
+void RendererES3::ModelDraw(ModelHandle model) {
+    this->gModelCollectionES3.Get(model.id).Draw();
+    // internModel->Draw();
+}
+
+
+
+
+/*
+    Camera
+*/
+CameraHandle RendererES3::CameraCreate(Vec3 position, Vec3 forward, CameraProjection projection){
+    Identifier id = this->gCameraCollectionES3.Allocate(glm::vec3(position.x, position.y, position.z), glm::vec3(forward.x, forward.y, forward.z), projection);
+
+    CameraHandle cam;
     cam.id = id;
 
     return cam;
 }
 
 
-/*
-    Destructors
-*/
-void RendererES3::DestroyCamera(Camera camera) {
+void RendererES3::CameraDestroy(CameraHandle camera) {
     this->gCameraCollectionES3.Dellocate(camera.id);
 }
 
-
-void RendererES3::DestroyMesh(Mesh mesh) {
-    this->gMeshCollectionES3.Dellocate(mesh.id);
+void RendererES3::CameraTranslate(CameraHandle camera, Vec3 to) {
+    this->gCameraCollectionES3.Get(camera.id).Translate(glm::vec3(to.x, to.y, to.z));
 }
-
-
-/*
-    Render Commands
-*/
-void RendererES3::DrawMesh(Mesh mesh) {
-    MeshES3 _mesh = this->gMeshCollectionES3.Get(mesh.id);
-
-    glBindBuffer(_mesh.VertexArrayBuffer, GL_VERTEX_ARRAY);
-    glBindBuffer(_mesh.IndexBuffer, GL_ELEMENT_ARRAY_BUFFER);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(0 * sizeof(float)));
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
-   
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-    glEnableVertexAttribArray(2);
-
-    glDrawElements(GL_TRIANGLES, _mesh.num_indices, GL_UNSIGNED_INT, nullptr);
+void RendererES3::CameraRotate(CameraHandle camera, float angle, Vec3 axis) {
+    this->gCameraCollectionES3.Get(camera.id).Rotate(angle, glm::vec3(axis.x, axis.y, axis.z));
+}
+void RendererES3::CameraLookAt(CameraHandle camera, Vec3 position) {
+    this->gCameraCollectionES3.Get(camera.id).LookAt(glm::vec3(position.x, position.y, position.z));
 }
 
 

@@ -3,7 +3,12 @@
 
 #include "DataStructures/Identifier.hpp"
 
-struct Camera {
+enum CameraProjection {
+    PERSPECTIVE_PROJECTION,
+    ORTHOGONAL_PROJECTION,
+};
+
+struct CameraHandle {
     Identifier id;
 };
 

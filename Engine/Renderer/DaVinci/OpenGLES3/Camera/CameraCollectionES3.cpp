@@ -18,7 +18,7 @@ CameraCollectionES3::~CameraCollectionES3() { this->Destroy(); }
 
 void CameraCollectionES3::Destroy() {}
 
-Identifier CameraCollectionES3::Allocate(glm::vec3 position, glm::vec3 forward) {
+Identifier CameraCollectionES3::Allocate(glm::vec3 position, glm::vec3 forward, CameraProjection projection) {
     mutex.lock();
     Identifier id;
 
@@ -27,12 +27,12 @@ Identifier CameraCollectionES3::Allocate(glm::vec3 position, glm::vec3 forward) 
         unsigned short major = GetIdentifierMajor(id);
     
     
-        this->CameraPatch[minnor].mesh[major] = CameraES3(position, forward);
+        this->CameraPatch[minnor].mesh[major] = CameraES3(position, forward, projection);
         mutex.unlock();
         return id;
     }
 
-    this->CameraPatch[this->CameraPatch.size() - 1].mesh[LastAvaliableBatch] = CameraES3(position, forward);
+    this->CameraPatch[this->CameraPatch.size() - 1].mesh[LastAvaliableBatch] = CameraES3(position, forward, projection);
 
     id = EncriptId(this->CameraPatch.size() - 1, LastAvaliableBatch);
     
@@ -63,7 +63,7 @@ void CameraCollectionES3::Dellocate(Identifier id) {
     avaliableCameraeIds.MakeAvaliable(id);
 };
 
-CameraES3 CameraCollectionES3::Get(Identifier id) {
+CameraES3& CameraCollectionES3::Get(Identifier id) {
     unsigned short minnor = GetIdentifierMinnor(id);
     unsigned short major = GetIdentifierMajor(id);
 

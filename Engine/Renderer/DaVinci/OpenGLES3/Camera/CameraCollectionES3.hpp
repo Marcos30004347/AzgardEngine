@@ -34,9 +34,9 @@ class CameraCollectionES3 {
     CameraCollectionES3();
     ~CameraCollectionES3();
 
-    Identifier Allocate(glm::vec3 position, glm::vec3 forward);
+    Identifier Allocate(glm::vec3 position, glm::vec3 forward, CameraProjection projection);
     void Dellocate(Identifier id);
-    CameraES3 Get(Identifier id);
+    CameraES3& Get(Identifier id);
 
     void Destroy();
 };

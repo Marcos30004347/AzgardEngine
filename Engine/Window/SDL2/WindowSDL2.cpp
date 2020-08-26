@@ -15,22 +15,27 @@ SDL2Window::SDL2Window(const char* title, size_t width, size_t height) {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
+    // SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    // SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
 
     #else
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
+    // SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    // SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     #endif
 
-    this->canvas = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
+    this->window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
+
+    // SDL_GL_SetSwapInterval(0);
 
     #ifdef OPENGLES3_API
 
-    this->glContext = SDL_GL_CreateContext(canvas);
+    this->glContext = SDL_GL_CreateContext(window);
 
     if(!this->glContext) {
         std::cout << "Context not initialized!" << std::endl;
@@ -51,22 +56,22 @@ SDL2Window::~SDL2Window() {
     if(this->currentContextType == OpenGLES3Context && this->glContext)
         SDL_GL_DeleteContext(this->glContext);
 
-    SDL_DestroyWindow(this->canvas);
+    SDL_DestroyWindow(this->window);
 }
 
 void SDL2Window::Swap() {
-    SDL_GL_SwapWindow(this->canvas);
+    SDL_GL_SwapWindow(this->window);
 }
 
 void SDL2Window::SetVsync(bool useVsync) {
-    SDL_GL_SetSwapInterval(useVsync ? 1 : -1);
+    SDL_GL_SetSwapInterval(useVsync);
 }
 
 void SDL2Window::SetContext(WindowContext context) {
     if(context == OpenGLES3Context) {
         #ifdef OPENGLES3_API
 
-        SDL_GL_MakeCurrent(this->canvas, glContext);
+        SDL_GL_MakeCurrent(this->window, glContext);
     
         #elif
         #error OPENGLES3 NOT SUPORTED

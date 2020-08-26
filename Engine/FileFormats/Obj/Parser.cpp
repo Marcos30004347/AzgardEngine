@@ -10,7 +10,7 @@
 
 using namespace tinyobj;
 
-ObjModel ParseObj(const char* obj) {
+ModelData ParseObj(const char* obj) {
     tinyobj::ObjReader reader = tinyobj::ObjReader();
     std::istringstream obgStream = std::istringstream(obj);
 
@@ -24,14 +24,14 @@ ObjModel ParseObj(const char* obj) {
     tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, &obgStream);
 
 
-    ObjMeshes objmeshes = ObjMeshes(shapes.size());
+    std::vector<MeshData> objmeshes = std::vector<MeshData>(shapes.size());
 
     for (size_t s = 0; s < shapes.size(); s++) {
-        objmeshes[s] = ObjMesh();
+        objmeshes[s] = MeshData();
 
         objmeshes[s].name = shapes[s].name.c_str();
-        objmeshes[s].vertices = ObjVertices(shapes[s].mesh.indices.size());
-        objmeshes[s].indices = ObjIndices(shapes[s].mesh.indices.size());
+        objmeshes[s].vertices = std::vector<VerticeData>(shapes[s].mesh.indices.size());
+        objmeshes[s].indices = std::vector<unsigned int>(shapes[s].mesh.indices.size());
     
         size_t index_offset = 0;
     
@@ -39,7 +39,7 @@ ObjModel ParseObj(const char* obj) {
             int fv = shapes[s].mesh.num_face_vertices[f];
 
             for (size_t v = 0; v < fv; v++) {
-                Vertice obj_vertice;
+                VerticeData obj_vertice;
             
                 tinyobj::index_t idx = shapes[s].mesh.indices[index_offset + v];
             
@@ -63,9 +63,8 @@ ObjModel ParseObj(const char* obj) {
                 obj_vertice.normX = tx;
                 obj_vertice.normY = ty;
 
-                objmeshes[s].indices[index_offset + v] = objmeshes[s].vertices.size();
+                objmeshes[s].indices[index_offset + v] = index_offset + v;
                 objmeshes[s].vertices[index_offset + v] = obj_vertice;
-                std::cout << index_offset + v << std::endl;
             }
         
             index_offset += fv;
@@ -75,8 +74,10 @@ ObjModel ParseObj(const char* obj) {
         }
     }
 
-    ObjModel model;
+    ModelData model;
     model.meshes = objmeshes;
+
+    // ??
     model.name = "Model";
 
     return model;
