@@ -30,13 +30,22 @@ void CameraES3::SetProjectionPerspective(float fov, float aspect, float near, fl
     this->projection = PERSPECTIVE_PROJECTION;
 }
 
-glm::mat4 CameraES3::GetView() {
+glm::mat4& CameraES3::GetView() {
     return this->ViewMatrix;
 }
 
-glm::mat4 CameraES3::GetProjection() {
+glm::mat4& CameraES3::GetProjection() {
     return this->ProjectionMatrix;
 }
+
+glm::vec3 CameraES3::GetForward() {
+    return this->Forward;
+}
+
+glm::vec3 CameraES3::GetPosition() {
+    return this->Position;
+}
+
 
 void CameraES3::Translate(glm::vec3 to) { 
     this->Position+=to;
@@ -44,7 +53,14 @@ void CameraES3::Translate(glm::vec3 to) {
 }
 
 void CameraES3::LookAt(glm::vec3 direction) {
-    this->ViewMatrix = glm::lookAt(this->Position, this->Position + this->Forward, this->Up);
+    float vectorLength = glm::length(direction);
+    vectorLength = vectorLength > 0 ? vectorLength : 1.f;
+
+    glm::vec3 dir = direction/vectorLength;
+
+    this->Forward = direction/vectorLength;
+
+    this->ViewMatrix = glm::lookAt(this->Position, this->Forward, this->Up);
 }
 
 void CameraES3::Rotate(float angle, glm::vec3 axis) { 

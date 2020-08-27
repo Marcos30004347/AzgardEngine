@@ -1,15 +1,18 @@
 #include "definitions.hpp"
 
 #ifndef MESHES3_H
-#define MeshES3_H
+#define MESHES3_H
 
 #ifdef OPENGLES3_API
 
 #include <GL/glew.h>
+#include <glm/glm.hpp>
 
-#include "Renderer/Model.hpp"
+#include "Renderer/Shader.hpp"
+#include "Renderer/Camera.hpp"
 
 #include "DataStructures/Model.hpp"
+#include "DataStructures/Identifier.hpp"
 
 class MeshES3 {
     public:
@@ -19,12 +22,15 @@ class MeshES3 {
     GLuint VertexArrayBuffer;
     GLuint IndexBuffer;
 
-    size_t NumIndices;
+    ShaderHandle hShader;
+
+    unsigned int NumIndices;
 
     MeshES3();
     MeshES3(MeshData data);
 
-    void Draw();
+    void Draw(CameraHandle camera, glm::mat4 model);
+    void SetShader(ShaderHandle shader);
 
     ~MeshES3();
     void DestroyBuffers();

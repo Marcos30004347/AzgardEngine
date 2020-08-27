@@ -112,7 +112,7 @@ set(USE_FLAGS "${USE_FLAGS} -s USE_HARFBUZZ=1")
 set(USE_FLAGS "${USE_FLAGS} -s USE_FREETYPE=1")
 set(USE_FLAGS "${USE_FLAGS} -s USE_PTHREADS=1")
 set(USE_FLAGS "${USE_FLAGS} -s PTHREAD_POOL_SIZE=8")
-set(USE_FLAGS "${USE_FLAGS} -s ALLOW_MEMORY_GROWTH=1")
+# set(USE_FLAGS "${USE_FLAGS} -s ALLOW_MEMORY_GROWTH=1")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${USE_FLAGS}")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${USE_FLAGS}")
@@ -193,15 +193,14 @@ add_library(
     Managers/DrawManager.cpp
     Managers/SceneManager.cpp
 
-    FileFormats/Gltf2/Parser.cpp
     FileFormats/Obj/Parser.cpp
     FileFormats/Base64.cpp
 
     Renderer/DaVinci/OpenGLES3/RendererES3.cpp
+    Renderer/DaVinci/OpenGLES3/CollectionsES3.cpp
 
-    Renderer/DaVinci/OpenGLES3/Material/ShaderES3.cpp
-    Renderer/DaVinci/OpenGLES3/Material/MaterialES3.cpp
-    Renderer/DaVinci/OpenGLES3/Material/MaterialCollectionES3.cpp
+    Renderer/DaVinci/OpenGLES3/Shader/ShaderES3.cpp
+    Renderer/DaVinci/OpenGLES3/Shader/ShaderCollectionES3.cpp
 
     Renderer/DaVinci/OpenGLES3/Mesh/MeshES3.cpp
     Renderer/DaVinci/OpenGLES3/Mesh/ModelES3.cpp

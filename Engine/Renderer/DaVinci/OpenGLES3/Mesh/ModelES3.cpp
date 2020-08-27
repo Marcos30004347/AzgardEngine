@@ -23,12 +23,16 @@ void ModelES3::Destroy() {
     //     mesh.Destroy();
 }
 
-void ModelES3::Draw() {
+void ModelES3::Draw(CameraHandle camera) {
     for(int m=0; m<this->Meshes.size(); m++) {
-        this->Meshes[m].Draw();
+        this->Meshes[m].Draw(camera, this->ModelMatrix);
 
     }
 }
 
+void ModelES3::SetMeshShader(unsigned int mesh_key, ShaderHandle shader) {
+    
+    this->Meshes[mesh_key].hShader = shader;
+}
 
 #endif

@@ -1,11 +1,12 @@
 #include "definitions.hpp"
 
 #ifndef CAMERAHCOLLECTIONES3_H
-#ifdef OPENGLES3_API
-
 #define CAMERAHCOLLECTIONES3_H
 
-#include "DataStructures/Identifier.hpp"
+#ifdef OPENGLES3_API
+
+#include "DataStructures/Collection.hpp"
+
 #include "CameraES3.hpp"
 
 #include<mutex>
@@ -19,29 +20,23 @@ struct CameraBatchES3 {
 };
 
 
-class CameraCollectionES3 {
+class CameraCollectionES3 : public Collection<CameraES3> {
     private:
-
-    unsigned short LastAvaliableBatch;
-
-    IdentifierQueue avaliableCameraeIds;
-
-    std::vector<CameraBatchES3> CameraPatch;
-
-    static std::mutex mutex;
-
-    public:
     CameraCollectionES3();
     ~CameraCollectionES3();
 
-    Identifier Allocate(glm::vec3 position, glm::vec3 forward, CameraProjection projection);
-    void Dellocate(Identifier id);
+    std::vector<CameraBatchES3> CameraPatch;
+    static std::mutex mutex;
+
+    public:
+
+    static void StartUp();
+    static void ShutDown();
+
+    Identifier Insert(CameraES3& cam);
+    void Delete(Identifier id);
     CameraES3& Get(Identifier id);
-
-    void Destroy();
 };
-
-
 
 
 #endif

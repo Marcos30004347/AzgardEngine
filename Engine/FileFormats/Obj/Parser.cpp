@@ -23,8 +23,9 @@ ModelData ParseObj(const char* obj) {
 
     tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, &obgStream);
 
-
     std::vector<MeshData> objmeshes = std::vector<MeshData>(shapes.size());
+    float x = 0;
+    float y = 0;
 
     for (size_t s = 0; s < shapes.size(); s++) {
         objmeshes[s] = MeshData();
@@ -34,7 +35,7 @@ ModelData ParseObj(const char* obj) {
         objmeshes[s].indices = std::vector<unsigned int>(shapes[s].mesh.indices.size());
     
         size_t index_offset = 0;
-    
+
         for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++) {
             int fv = shapes[s].mesh.num_face_vertices[f];
 
@@ -51,7 +52,8 @@ ModelData ParseObj(const char* obj) {
                 tinyobj::real_t nz = attrib.normals[3*idx.normal_index+2];
                 tinyobj::real_t tx = attrib.texcoords[2*idx.texcoord_index+0];
                 tinyobj::real_t ty = attrib.texcoords[2*idx.texcoord_index+1];
-
+                x+= vx;
+                y+= vy;
                 obj_vertice.posX = vx;
                 obj_vertice.posY = vy;
                 obj_vertice.posZ = vz;
@@ -60,8 +62,8 @@ ModelData ParseObj(const char* obj) {
                 obj_vertice.normY = ny;
                 obj_vertice.normZ = nz;
             
-                obj_vertice.normX = tx;
-                obj_vertice.normY = ty;
+                obj_vertice.uvX = tx;
+                obj_vertice.uvY = ty;
 
                 objmeshes[s].indices[index_offset + v] = index_offset + v;
                 objmeshes[s].vertices[index_offset + v] = obj_vertice;
@@ -76,6 +78,10 @@ ModelData ParseObj(const char* obj) {
 
     ModelData model;
     model.meshes = objmeshes;
+    x = x/attrib.vertices.size();
+    y = y/attrib.vertices.size();
+
+    printf("center %f %f\n", x, y);
 
     // ??
     model.name = "Model";

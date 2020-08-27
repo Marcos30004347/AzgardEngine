@@ -5,6 +5,8 @@
 
 #ifdef OPENGLES3_API
 
+#include "DataStructures/Collection.hpp"
+
 #include "ModelES3.hpp"
 
 #include <mutex>
@@ -16,23 +18,22 @@ struct ModelBatchES3 {
 };
 
  
-class ModelCollectionES3 {
+class ModelCollectionES3 : public Collection<ModelES3> {
     private:
-
-    unsigned short lastAvaliableBatch;
-
-    IdentifierQueue avaliableModeleIds;
+    ModelCollectionES3();
+    ~ModelCollectionES3();
 
     std::vector<ModelBatchES3> modelPatch;
 
     static std::mutex mutex;
 
     public:
-    ModelCollectionES3();
-    ~ModelCollectionES3();
 
-    Identifier Allocate(ModelData ModelData);
-    void Dellocate(Identifier id);
+    static void StartUp();
+    static void ShutDown();
+
+    Identifier Insert(ModelES3& ModelData);
+    void Delete(Identifier id);
     ModelES3& Get(Identifier id);
 
     void Destroy();

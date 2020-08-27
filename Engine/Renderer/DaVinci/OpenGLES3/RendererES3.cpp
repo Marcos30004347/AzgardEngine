@@ -4,25 +4,23 @@
 #include <GL/glew.h>
 
 #include "RendererES3.hpp"
+#include "CollectionsES3.hpp"
 
 /*
     Constructors and DEstructors Functions
 */
 RendererES3::RendererES3() {
+    CollectionsES3::StartUp();
+
     glEnable(GL_BLEND);  
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    glEnable(GL_MULTISAMPLE);
-
-    glClearColor(1.f, 0.0f, 1.0f, 1.0f);
-
-    this->gModelCollectionES3 = ModelCollectionES3();
-    this->gCameraCollectionES3 = CameraCollectionES3();
+    // glEnable(GL_MULTISAMPLE);
+    glEnable(GL_DEPTH_TEST);
+    glClearColor(1.f, 1.0f, 1.0f, 1.0f);
 }
 
 RendererES3::~RendererES3() {
-    this->gModelCollectionES3.Destroy();
-    this->gCameraCollectionES3.Destroy();
+    CollectionsES3::ShutDown();
 }
 
 
@@ -44,7 +42,7 @@ void RendererES3::FrameEnd() {
 }
 
 void RendererES3::FrameSetCamera(CameraHandle camera) {
-   this->activeCamera = this->gCameraCollectionES3.Get(camera.id); 
+   this->activeCamera = camera; 
 }
 
 
@@ -56,54 +54,105 @@ std::vector<RendererFeature> RendererES3::GetFeatures() {
 /*
     Model
 */
-ModelHandle RendererES3::ModelCreate(ModelData data) {
-    Identifier id = this->gModelCollectionES3.Allocate(data);
+ModelHandle RendererES3::ModelCreate(ModelData& data) {
+    ModelES3 model(data);
 
     ModelHandle sm;
-    sm.id = id;
+    sm.id = CollectionsES3::Models->Insert(model);
     sm.name = data.name;
-
     return sm;
 }
 
-void RendererES3::ModelDestroy(ModelHandle mesh) {
-    this->gModelCollectionES3.Dellocate(mesh.id);
+void RendererES3::ModelDestroy(ModelHandle& model) {
+    CollectionsES3::Models->Delete(model.id);
+    model.id = UINT32_MAX;
 }
 
 void RendererES3::ModelDraw(ModelHandle model) {
-    this->gModelCollectionES3.Get(model.id).Draw();
-    // internModel->Draw();
+    CollectionsES3::Models->Get(model.id).Draw(this->activeCamera);
 }
 
-
+void RendererES3::ModelSetMeshShader(ModelHandle model, unsigned int mesh_key, ShaderHandle shader) {
+    CollectionsES3::Models->Get(model.id).SetMeshShader(mesh_key, shader);
+}
 
 
 /*
     Camera
 */
 CameraHandle RendererES3::CameraCreate(Vec3 position, Vec3 forward, CameraProjection projection){
-    Identifier id = this->gCameraCollectionES3.Allocate(glm::vec3(position.x, position.y, position.z), glm::vec3(forward.x, forward.y, forward.z), projection);
+    CameraES3 camera(glm::vec3(position.x, position.y, position.z), glm::vec3(forward.x, forward.y, forward.z), projection);
 
     CameraHandle cam;
-    cam.id = id;
-
+    cam.id = CollectionsES3::Cameras->Insert(camera);
     return cam;
 }
 
 
-void RendererES3::CameraDestroy(CameraHandle camera) {
-    this->gCameraCollectionES3.Dellocate(camera.id);
+void RendererES3::CameraDestroy(CameraHandle& camera) {
+    CollectionsES3::Cameras->Delete(camera.id);
+    camera.id = UINT32_MAX;
 }
 
 void RendererES3::CameraTranslate(CameraHandle camera, Vec3 to) {
-    this->gCameraCollectionES3.Get(camera.id).Translate(glm::vec3(to.x, to.y, to.z));
-}
-void RendererES3::CameraRotate(CameraHandle camera, float angle, Vec3 axis) {
-    this->gCameraCollectionES3.Get(camera.id).Rotate(angle, glm::vec3(axis.x, axis.y, axis.z));
-}
-void RendererES3::CameraLookAt(CameraHandle camera, Vec3 position) {
-    this->gCameraCollectionES3.Get(camera.id).LookAt(glm::vec3(position.x, position.y, position.z));
+    CollectionsES3::Cameras->Get(camera.id).Translate(glm::vec3(to.x, to.y, to.z));
 }
 
+void RendererES3::CameraRotate(CameraHandle camera, float angle, Vec3 axis) {
+    CollectionsES3::Cameras->Get(camera.id).Rotate(angle, glm::vec3(axis.x, axis.y, axis.z));
+}
+
+void RendererES3::CameraLookAt(CameraHandle camera, Vec3 position) {
+    CollectionsES3::Cameras->Get(camera.id).LookAt(glm::vec3(position.x, position.y, position.z));
+}
+
+
+/*
+    Shader
+*/
+ShaderHandle RendererES3::ShaderCreate(ShaderData& shader) {
+    ShaderES3 shaderes3(shader);
+
+    ShaderHandle shaderHandle = {};
+    shaderHandle.id = CollectionsES3::Shaders->Insert(shaderes3);
+    return shaderHandle;
+}
+
+void RendererES3::ShaderDestroy(ShaderHandle& shader) {
+    CollectionsES3::Shaders->Delete(shader.id);
+    shader.id = UINT32_MAX;
+}
+
+
+// void RendererES3::ShaderUniformMatrix4(const char* name, float* data) {
+
+// }
+// void RendererES3::ShaderUniformMatrix4Array(const char* name, float* data, unsigned int count) {
+
+// }
+// void RendererES3::ShaderUniformVector4(const char* name, float x, float y, float z, float a) {
+
+// }
+// void RendererES3::ShaderUniformVector3(const char* name, float x, float y, float z) {
+
+// }
+// void RendererES3::ShaderUniformVector2(const char* name, float x, float y) {
+
+// }
+// void RendererES3::ShaderUniformIntArray(const char* name, int* array, int count) {
+
+// }
+// void RendererES3::ShaderUniformFloatArray(const char* name, float* array, int count) {
+
+// }
+// void RendererES3::ShaderUniformVector2Array(const char* name, glm::vec2* array, int count) {
+
+// }
+// void RendererES3::ShaderUniformFloat(const char* name, float x) {
+
+// }
+// void RendererES3::ShaderUniformInt(const char* name, int data) {
+
+// }
 
 #endif

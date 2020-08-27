@@ -101,6 +101,8 @@ std::string FileManager::GetFileString(unsigned int fh) {
 
     vShaderStream << this->fileStreams[fh].rdbuf();
 
+    this->ResetFile(fh);
+
     return vShaderStream.str();
 }
 

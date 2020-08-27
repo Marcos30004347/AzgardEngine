@@ -12,6 +12,8 @@
 #include "glm/gtc/type_ptr.hpp"
 
 #include "Renderer/Model.hpp"
+#include "Renderer/Camera.hpp"
+
 #include "MeshES3.hpp"
 
 #include "DataStructures/Model.hpp"
@@ -28,7 +30,8 @@ class ModelES3 {
     ModelES3();
     ModelES3(ModelData data);
 
-    void Draw();
+    void Draw(CameraHandle camera);
+    void SetMeshShader(unsigned int mesh_key, ShaderHandle shader);
 
     ~ModelES3();
     void Destroy();
