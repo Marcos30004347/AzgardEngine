@@ -5,9 +5,8 @@
 
 #include "DrawManager.hpp"
 
-
-#ifdef OPENGLES3_API
-#include "Renderer/DaVinci/OpenGLES3/RendererES3.hpp"
+#ifdef OPENGLES3_SUPORTED
+#include "Renderer/OpenGLES3/RendererES3.hpp"
 #endif
 
 DrawManager* DrawManager::gInstance = nullptr;
@@ -36,7 +35,7 @@ void DrawManager::StartUp() {
     std::cout << "starting up mesh manager" << std::endl;
     DrawManager::gInstance = new DrawManager();
     if(currentGraphicApi == GraphicAPI::OPENGLES3) {
-        #ifdef OPENGLES3_API 
+        #ifdef OPENGLES3_SUPORTED 
         gRenderer = new RendererES3();
         #elif
         assert(0 && "OpenGLES3 not suported");
@@ -56,7 +55,7 @@ void DrawManager::SwitchAPI(GraphicAPI api) {
     currentGraphicApi = api;
 
     if(currentGraphicApi == OPENGLES3) {
-        #ifdef OPENGLES3_API 
+        #ifdef OPENGLES3_SUPORTED 
         gRenderer = new RendererES3();
         #elif
         assert(0 && "OpenGLES3 not suported");

@@ -9,7 +9,6 @@
 #include "DataStructures/Model.hpp"
 #include "DataStructures/Vec3.hpp"
 
-enum RendererFeature {};
 
 enum GraphicAPI {
     NO_GRAPHIC_API = 0,
@@ -20,12 +19,16 @@ enum GraphicAPI {
 class Renderer {
     public:
     virtual void FrameBegin() = 0;
+    virtual void FrameRender() = 0;
     virtual void FrameEnd() = 0;
     virtual void FrameSetCamera(CameraHandle camera) = 0;
 
+    virtual void ModelSetVisiblity(ModelHandle model, bool isVisible = true) = 0;
+    virtual void MeshSetVisiblity(MeshHandle model, bool isVisible = true) = 0;
 
+    
     virtual ModelHandle ModelCreate(ModelData& data) = 0;
-    virtual void ModelDraw(ModelHandle mesh) = 0;
+    virtual void ModelDraw(ModelHandle model) = 0;
     virtual void ModelSetMeshShader(ModelHandle model, unsigned int mesh_key, ShaderHandle shader) = 0;
     virtual void ModelDestroy(ModelHandle& model) = 0;
 
@@ -37,21 +40,31 @@ class Renderer {
 
     virtual ShaderHandle ShaderCreate(ShaderData& shader) = 0;
     virtual void ShaderDestroy(ShaderHandle& shader) = 0;
-    // virtual void Shader(ShaderHandle shader) = 0;
-    // virtual void ShaderUniformMatrix4(const char* name, float* data);
-    // virtual void ShaderUniformMatrix4Array(const char* name, float* data, unsigned int count) = 0;
-    // virtual void ShaderUniformVector4(const char* name, float x, float y, float z, float a) = 0;
-    // virtual void ShaderUniformVector3(const char* name, float x, float y, float z) = 0;
-    // virtual void ShaderUniformVector2(const char* name, float x, float y) = 0;
-    // virtual void ShaderUniformIntArray(const char* name, int* array, int count) = 0;
-    // virtual void ShaderUniformFloatArray(const char* name, float* array, int count) = 0;
-    // virtual void ShaderUniformVector2Array(const char* name, glm::vec2* array, int count) = 0;
-    // virtual void ShaderUniformFloat(const char* name, float x) = 0;
-    // virtual void ShaderUniformInt(const char* name, int data) = 0;
-
-    virtual std::vector<RendererFeature> GetFeatures() = 0;
-    virtual void EnableFeature(RendererFeature feat, void* feat_params = nullptr) = 0;
 };
 
+
+// template<typename Implementation>
+// class RendererObj {
+//     Implementation* iRenderer;
+
+//     public:
+//     inline void FrameBegin() { Implementation.FrameBegin(); }
+//     inline void FrameEnd() { Implementation.FrameEnd(); }
+//     inline void FrameSetCamera(CameraHandle camera) { Implementation.FrameSetCamera(camera); }
+
+//     inline ModelHandle ModelCreate(ModelData& data) { Implementation.ModelCreate(data); }
+//     inline void ModelDraw(ModelHandle mesh) { Implementation.ModelDraw(mesh) }
+//     inline void ModelSetMeshShader(ModelHandle model, unsigned int mesh_key, ShaderHandle shader) { Implementation.ModelSetMeshShader(model, mesh_key, shader); }
+//     inline void ModelDestroy(ModelHandle& model) { Implementation.ModelDestroy(model) }
+
+//     inline CameraHandle CameraCreate(Vec3 position, Vec3 forward, CameraProjection projection) { Implementation.CameraCreate(position, forward, projection); }
+//     inline void CameraTranslate(CameraHandle camera, Vec3 to) { Implementation.CameraTranslate(camera, to) }
+//     inline void CameraRotate(CameraHandle camera, float angle, Vec3 axis) { Implementation.CameraRotate(camera, angle, axis); }
+//     inline void CameraLookAt(CameraHandle camera, Vec3 position) { Implementation.CameraLookAt(camera, position); }
+//     inline void CameraDestroy(CameraHandle& camera) { Implementation.CameraDestroy(camera); }
+
+//     inline ShaderHandle ShaderCreate(ShaderData& shader) { Implementation.ShaderCreate(shader); }
+//     inline void ShaderDestroy(ShaderHandle& shader) { Implementation.ShaderDestroy(shader); }
+// };
 
 #endif

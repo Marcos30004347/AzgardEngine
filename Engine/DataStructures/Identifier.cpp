@@ -9,9 +9,10 @@ IdentifierQueue::~IdentifierQueue() {}
 bool IdentifierQueue::GetAvaliable(Identifier* id) {
     mutex.lock();
 
-    if(queue.size()) {
-        *id = this->queue.front();
-        this->queue.pop();
+    if(this->invalids.size()) {
+        *id = this->invalids.front();
+        this->invalids.pop_front();
+
         mutex.unlock();
         return true;
     }
@@ -22,6 +23,16 @@ bool IdentifierQueue::GetAvaliable(Identifier* id) {
 
 void IdentifierQueue::MakeAvaliable(Identifier id) {
     mutex.lock();
-    queue.push(id);
+    this->invalids.push_back(id);
     mutex.unlock();
+}
+
+bool IdentifierQueue::Has(Identifier id) {
+    for(Identifier i : this->invalids) {
+        if(i == id) {
+            return true;
+        }
+    }
+
+    return false; 
 }

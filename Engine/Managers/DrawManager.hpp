@@ -10,6 +10,7 @@ class DrawManager {
     static DrawManager* gInstance;
 
     static Renderer* gRenderer;
+
     static GraphicAPI currentGraphicApi;
 
     DrawManager();

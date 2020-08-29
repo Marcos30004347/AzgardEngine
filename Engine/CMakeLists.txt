@@ -196,18 +196,18 @@ add_library(
     FileFormats/Obj/Parser.cpp
     FileFormats/Base64.cpp
 
-    Renderer/DaVinci/OpenGLES3/RendererES3.cpp
-    Renderer/DaVinci/OpenGLES3/CollectionsES3.cpp
+    Renderer/OpenGLES3/RendererES3.cpp
 
-    Renderer/DaVinci/OpenGLES3/Shader/ShaderES3.cpp
-    Renderer/DaVinci/OpenGLES3/Shader/ShaderCollectionES3.cpp
+    Renderer/OpenGLES3/Shader/ShaderES3.cpp
+    Renderer/OpenGLES3/Shader/ShaderManagerES3.cpp
 
-    Renderer/DaVinci/OpenGLES3/Mesh/MeshES3.cpp
-    Renderer/DaVinci/OpenGLES3/Mesh/ModelES3.cpp
-    Renderer/DaVinci/OpenGLES3/Mesh/ModelCollectionES3.cpp
+    Renderer/OpenGLES3/Mesh/MeshES3.cpp
+    Renderer/OpenGLES3/Mesh/ModelES3.cpp
+    Renderer/OpenGLES3/Mesh/ModelManagerES3.cpp
+    Renderer/OpenGLES3/Mesh/MeshManagerES3.cpp
 
-    Renderer/DaVinci/OpenGLES3/Camera/CameraES3.cpp
-    Renderer/DaVinci/OpenGLES3/Camera/CameraCollectionES3.cpp
+    Renderer/OpenGLES3/Camera/CameraES3.cpp
+    Renderer/OpenGLES3/Camera/CameraManagerES3.cpp
 
     Window/SDL2/WindowSDL2.cpp
 )

@@ -20,8 +20,6 @@ class Collection : public Singleton<Collection<T>> {
 
     virtual Identifier Insert(T& value) = 0;
     virtual void Delete(Identifier id) = 0;
-
-    virtual T& Get(Identifier id) = 0;
 };
 
 

@@ -5,7 +5,7 @@
 #ifdef SDL2_IMP
 
 
-#ifdef OPENGLES3_API
+#ifdef OPENGLES3_SUPORTED
 #include<GL/glew.h>
 #endif
 
@@ -33,7 +33,7 @@ SDL2Window::SDL2Window(const char* title, size_t width, size_t height) {
 
     // SDL_GL_SetSwapInterval(0);
 
-    #ifdef OPENGLES3_API
+    #ifdef OPENGLES3_SUPORTED
 
     this->glContext = SDL_GL_CreateContext(window);
 
@@ -69,7 +69,7 @@ void SDL2Window::SetVsync(bool useVsync) {
 
 void SDL2Window::SetContext(WindowContext context) {
     if(context == OpenGLES3Context) {
-        #ifdef OPENGLES3_API
+        #ifdef OPENGLES3_SUPORTED
 
         SDL_GL_MakeCurrent(this->window, glContext);
     

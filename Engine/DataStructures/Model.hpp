@@ -16,9 +16,16 @@ struct MeshData {
     std::vector<VerticeData> vertices;
 };
 
+struct BoundingBox {
+    float p0x, p0y, p0z;
+    float p1x, p1y, p1z;
+};
+
 struct ModelData {
     const char* name;
     std::vector<MeshData> meshes;
+    BoundingBox boundings;
+    float centerX, centerY, centerZ;
 };
 
 #endif

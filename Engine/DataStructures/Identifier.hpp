@@ -3,6 +3,7 @@
 
 #include<queue>
 #include<mutex>
+#include<list>
 
 using Identifier = unsigned int;
 
@@ -12,7 +13,8 @@ inline unsigned short GetIdentifierMajor(Identifier id) { return id; }
 
 class IdentifierQueue {
     private:
-    std::queue<Identifier> queue;
+    std::list<Identifier> invalids;
+
     static std::mutex mutex;
 
     public:
@@ -20,6 +22,7 @@ class IdentifierQueue {
     ~IdentifierQueue();
 
     bool GetAvaliable(Identifier* id);
+    bool Has(Identifier id);
     void MakeAvaliable(Identifier id);
 };
 

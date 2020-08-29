@@ -7,6 +7,7 @@
 #include <sstream>
 #include <fstream>
 #include <iostream>
+#include <float.h>
 
 using namespace tinyobj;
 
@@ -26,6 +27,11 @@ ModelData ParseObj(const char* obj) {
     std::vector<MeshData> objmeshes = std::vector<MeshData>(shapes.size());
     float x = 0;
     float y = 0;
+    float z = 0;
+
+    float lessZ = __FLT_MIN__, greaterZ = __FLT_MAX__;
+    float lessX = __FLT_MIN__, greaterX = __FLT_MAX__;
+    float lessY = __FLT_MIN__, greaterY = __FLT_MAX__;
 
     for (size_t s = 0; s < shapes.size(); s++) {
         objmeshes[s] = MeshData();
@@ -52,8 +58,20 @@ ModelData ParseObj(const char* obj) {
                 tinyobj::real_t nz = attrib.normals[3*idx.normal_index+2];
                 tinyobj::real_t tx = attrib.texcoords[2*idx.texcoord_index+0];
                 tinyobj::real_t ty = attrib.texcoords[2*idx.texcoord_index+1];
+
+                if(vx < lessX) lessX = vx;
+                if(vx > greaterX) greaterX = vx;
+
+                if(vy < lessY) lessY = vy;
+                if(vy > greaterY) greaterY = vy;
+
+                if(vz < lessZ) lessZ = vz;
+                if(vz > greaterZ) greaterZ = vz;
+            
                 x+= vx;
                 y+= vy;
+                z+= vz;
+
                 obj_vertice.posX = vx;
                 obj_vertice.posY = vy;
                 obj_vertice.posZ = vz;
@@ -67,6 +85,7 @@ ModelData ParseObj(const char* obj) {
 
                 objmeshes[s].indices[index_offset + v] = index_offset + v;
                 objmeshes[s].vertices[index_offset + v] = obj_vertice;
+
             }
         
             index_offset += fv;
@@ -77,13 +96,24 @@ ModelData ParseObj(const char* obj) {
     }
 
     ModelData model;
+
+    model.boundings.p0x = lessX;
+    model.boundings.p0y = lessY;
+    model.boundings.p0z = lessZ;
+
+    model.boundings.p1x = greaterX;
+    model.boundings.p1y = greaterY;
+    model.boundings.p1z = greaterZ;
+
     model.meshes = objmeshes;
     x = x/attrib.vertices.size();
     y = y/attrib.vertices.size();
+    z = z/attrib.vertices.size();
 
-    printf("center %f %f\n", x, y);
+    model.centerX = x;
+    model.centerY = y;
+    model.centerZ = z;
 
-    // ??
     model.name = "Model";
 
     return model;
